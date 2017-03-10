@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Business\Business;
+use App\Models\Customer\Customer;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,8 +24,8 @@ class Invoice extends Model
         'remote_id', 'amount', 'currency', 'status', 'due_date', 'remote_customer_id', 'remote_subscription_id', 'business_id'
     ];
 
-    public function business()
+    public function customer()
     {
-        return $this->belongsTo(Business::class);
+        return $this->belongsTo(Customer::class);
     }
 }

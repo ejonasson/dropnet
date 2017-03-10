@@ -24,10 +24,14 @@
             return {
                 emailSubject: '',
                 emailContent: '',
-                emailSendDealy: 0,
+                emailSendDelay: 0,
             }
         },
         props: {
+            id: {
+                type: Number,
+                default: 0
+            },
             subject: {
                 type: String,
                 default: ''
@@ -53,6 +57,7 @@
         methods: {
             new (index) {
                 return {
+                    id: 0,
                     subject: '',
                     content: '',
                     sendDelay: 0,

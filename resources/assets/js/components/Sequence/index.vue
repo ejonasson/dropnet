@@ -14,13 +14,14 @@
 
         <h3>Sequence Messages</h3>
         <sequence-email v-for="email in sequence"
+        :id="email.id"
         :subject="email.subject"
         :content="email.content"
         :send-delay="email.sendDelay"
         :index="email.index"
         ></sequence-email>
         <a href="#" class="button is-info" @click.prevent="createEmail"> Create New Sequence Email</a>
-        <a href="#" class="button is-primary" @click.prevent="save">{{text.save}}</a>
+        <a href="#" class="button is-primary" @click.prevent="createOrUpdate">{{text.save}}</a>
       </div>
     </div>
   </div>
@@ -40,6 +41,7 @@
     },
     data () {
       return {
+        id: 0,
         name: '',
         selectedPlan: '',
         plans: [],
@@ -48,24 +50,20 @@
       }
     },
     props: {
-      id: {
-        type: Number,
-        default: 0
-      },
       data: {
         type: String,
-        default: ''
+        default: '[]'
       },
       sourcePlans: {
         type: String,
-        default: ''
+        default: '[]'
       }
     },
     computed: {
       urls () {
         return {
           create: SiteUrls.businessApiUrl + 'sequence',
-          update: SiteUrls.businessApiUrl + '/sequence/' + this.id
+          update: SiteUrls.businessApiUrl + 'sequence/' + this.id
         }
       },
       text () {
@@ -91,32 +89,56 @@
       }
     },
     methods: {
-      // Still a WIP
       normalizeData (jsonData) {
         this.sequence = []
 
         let data = JSON.parse(jsonData)
-          this.name         = jsonData.name,
-          this.selectedPlan = jsonData.selectedPlan,
-          _.each(jsonData.sequence, (email) => {
-            this.sequence.push({
-                subject: email.subject,
-                content: email.content,
-                sendDelay: email.sendDelay,
-                index: email.index
-            })
+        this.id           = data.sequence.id
+        this.name         = data.sequence.name
+        this.selectedPlan = data.sequence.remote_subscription_id
+        _.each(data.emails, (email) => {
+          this.sequence.push({
+              id: email.id,
+              subject: email.subject,
+              content: email.body,
+              sendDelay: parseInt(email.delay),
+              index: email.index
           })
+        })
       },
       createEmail () {
         let email = SequenceEmail.methods.new(this.nextEmailIndex)
         this.sequence.push(email)
       },
+      createOrUpdate () {
+        return this.id === 0 ? this.create() : this.save()
+      },
+      updateSequenceEmailIds(emails) {
+        _.each(emails, (email) => {
+          _.each(this.sequence, (sequenceEmail) => { sequenceEmail.id = email.id })
+        })
+      },
+      create () {
+        this.saving = true
+        this.$http.post(this.urls.create, this.entityData).then(
+          (successResponse) => {
+            this.addAlert('sequence-alerts', 'success', 'Your Sequence has successfully been created')
+            this.id = successResponse.data.sequence.id
+            this.updateSequenceEmailIds(successResponse.data.emails)
+            this.saving = false
+          },
+          (errorResponse) => {
+            this.addAlert('sequence-alerts', 'danger', 'An error occurred when trying to save your Sequence')
+            this.saving = false
+          }
+        )
+      },
       save () {
-        let saveUrl = this.id === 0 ? this.urls.create : this.urls.update
         this.saving = true;
-        this.$http.post(saveUrl, this.entityData).then(
+        this.$http.put(this.urls.update, this.entityData).then(
           (successResponse) => {
             this.addAlert('sequence-alerts', 'success', 'Your Sequence has successfully been saved')
+            this.updateSequenceEmailIds(successResponse.data.emails)
             this.saving = false
           },
           (errorResponse) => {
@@ -143,7 +165,10 @@
     },
     created () {
       this.plans = JSON.parse(this.sourcePlans)
-      this.normalizeData(this.data)
+      if (this.data !== '[]') {
+        this.normalizeData(this.data)
+      }
+
       Event.$on('activePlanChange', this.updatePlanSelected)
       Event.$on('emailSubjectUpdate', this.updateEmailSubject)
       Event.$on('emailContentUpdate', this.updateEmailContent)

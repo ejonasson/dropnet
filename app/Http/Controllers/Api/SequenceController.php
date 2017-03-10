@@ -36,7 +36,12 @@ class SequenceController extends Controller
 
         $sequence->insertEmails($request->get('sequence'));
 
-        return response()->json($sequence);
+        $data = collect([
+            'sequence' => $sequence,
+            'emails'   => $sequence->emails
+        ]);
+
+        return response()->json($data);
     }
 
     /**
@@ -68,9 +73,22 @@ class SequenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug, $id)
     {
-        //
+        $sequence                           = Sequence::findOrFail($id);
+        $sequence->name                     = $request->get('name');
+        $sequence->remote_subscription_id   = $request->get('selectedPlan');
+        $sequence->business_id              = Business::current()->id;
+        $sequence->save();
+
+        $sequence->insertEmails($request->get('sequence'));
+
+        $data = collect([
+            'sequence' => $sequence,
+            'emails'   => $sequence->emails
+        ]);
+
+        return response()->json($data);
     }
 
     /**

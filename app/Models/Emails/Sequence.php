@@ -3,6 +3,7 @@
 namespace App\Models\Emails;
 
 use App\Models\Business\Business;
+use App\Models\Customer\Customer;
 use App\Models\Emails\Email;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class Sequence extends Model
     public function insertEmails(array $emails)
     {
         foreach ($emails as $new_email) {
-            $email = new Email;
+            $email = $this->emails()->find($new_email['id']) ?: new Email;
             $email->sequence_id = $this->id;
             $email->subject     = $new_email['subject'];
             $email->body        = $new_email['content'];
@@ -28,6 +29,18 @@ class Sequence extends Model
         }
 
         return $this;
+    }
+
+    /**
+     * Queues a series of messages for this customer
+     * @param  Customer $customer
+     * @return void
+     */
+    public function queueEmailsForCustomer(Customer $customer)
+    {
+        $this->emails->each(function ($email) use ($customer) {
+            $email->createMessageforCustomer($customer);
+        });
     }
 
     public function business()

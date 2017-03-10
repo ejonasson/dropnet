@@ -16,7 +16,7 @@ abstract class StripeInvoiceEvent
         $this->invoice = $invoice;
     }
 
-    public function getInvoice($invoice)
+    public function getInvoice()
     {
         return $this->invoice;
     }

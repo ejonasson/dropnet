@@ -4,6 +4,7 @@ namespace App\Integrations\Stripe;
 
 use App\Models\Business\Business;
 use App\Services\Api\BaseApi;
+use Stripe\Customer;
 use Stripe\Plan;
 
 class Api extends BaseApi
@@ -48,5 +49,24 @@ class Api extends BaseApi
         $this->setCacheValue($method, $plans);
 
         return $plans;
+    }
+
+    public function getCustomer($remote_customer_id)
+    {
+        $method = 'customer.get.' . $remote_customer_id;
+        if ($this->checkCache($method)) {
+            return $this->getCacheValue($method);
+        }
+
+        try {
+            $customer = Customer::retrieve($remote_customer_id);
+            $customer = collect($customer);
+        } catch (\Exception $e) {
+            $customer = collect();
+        }
+
+        $this->setCacheValue($method, $customer);
+
+        return $customer;
     }
 }

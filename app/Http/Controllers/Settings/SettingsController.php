@@ -22,6 +22,6 @@ class SettingsController extends Controller
         $business = Business::fromSlug($slug);
         $business->updateSettings($request->all());
 
-        dd('done');
+        return response()->json($business);
     }
 }

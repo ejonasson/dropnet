@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Integrations\Stripe\Api;
 use App\Models\Business\Business;
+use App\Models\Emails\Sequence;
 use Illuminate\Http\Request;
 
 class SequenceController extends Controller
@@ -16,7 +17,7 @@ class SequenceController extends Controller
     public function index()
     {
         $business = Business::current();
-        $sequencess = $business->sequences()->get();
+        $sequences = $business->sequences()->get();
 
         return view('business.sequences.index', compact('business', 'sequences'));
     }
@@ -48,24 +49,34 @@ class SequenceController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @todo  add middleware check confirming user can access this sequence
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug, $id)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
+     * @todo  add middleware check confirming user can access this sequence
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug, $id)
     {
-        //
+        $sequence  = Sequence::findOrFail($id);
+        $data = collect([
+            'sequence' => $sequence,
+            'emails'   => $sequence->emails
+        ]);
+
+        $business = Business::current();
+        $api      = new Api;
+        $plans    = $api->getAllSubscriptionPlans();
+
+        return view('business.sequences.edit', compact('business', 'data', 'plans'));
     }
 
     /**

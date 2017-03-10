@@ -3,6 +3,7 @@
 namespace App\Models\Business;
 
 use App\Models\Business\BusinessSettings;
+use App\Models\Customer\Customer;
 use App\Models\Emails\Sequence;
 use App\Models\Invoice;
 use App\Models\Transaction\Transaction;
@@ -97,9 +98,9 @@ class Business extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function invoices()
+    public function customers()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Customer::class);
     }
 
     public function sequences()

@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        \App\Integrations\Stripe\Events\FailedStripeInvoiceEvent::class => [
+            \App\Listeners\Sequence\StartSequence::class,
         ],
     ];
 

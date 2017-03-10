@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Emails\Message;
+use App\Models\Emails\Observers\MessageObserver;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\DuskServiceProvider;
 
@@ -14,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Message::observe(MessageObserver::class);
     }
 
     /**
