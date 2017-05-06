@@ -35,7 +35,7 @@ class SequenceMail extends Mailable
     public function build()
     {
         return $this->from('noreply@example.com')
-            ->subject($email->subject)
+            ->subject($this->email->subject)
             ->view('emails.sequence');
     }
 }

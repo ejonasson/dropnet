@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class ReceiveStripePaymentNotificationTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations;
+
     public function setUp()
     {
         parent::setUp();

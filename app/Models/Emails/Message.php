@@ -15,17 +15,21 @@ class Message extends Model
         $message = new self;
         $message->delivered = false;
         $message->opened = false;
+        $message->sent = false;
 
         return $message;
     }
 
     /**
-     * Sends this Email
+     * Send this Email,
+     * and mark it as sent
      * @return void
      */
     public function send()
     {
         Mail::to($this->customer->email)->send(new SequenceMail($this->email, $this->customer));
+        $this->sent = true;
+        $this->save();
     }
 
     public function email()

@@ -30,7 +30,7 @@ class SequenceController extends Controller
     {
         $sequence                           = new Sequence;
         $sequence->name                     = $request->get('name');
-        $sequence->remote_subscription_id   = $request->get('selectedPlan');
+        $sequence->remote_plan_id   = $request->get('selectedPlan');
         $sequence->business_id              = Business::current()->id;
         $sequence->save();
 
@@ -77,7 +77,7 @@ class SequenceController extends Controller
     {
         $sequence                           = Sequence::findOrFail($id);
         $sequence->name                     = $request->get('name');
-        $sequence->remote_subscription_id   = $request->get('selectedPlan');
+        $sequence->remote_plan_id   = $request->get('selectedPlan');
         $sequence->business_id              = Business::current()->id;
         $sequence->save();
 

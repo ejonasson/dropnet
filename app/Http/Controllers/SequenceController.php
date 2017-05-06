@@ -30,7 +30,7 @@ class SequenceController extends Controller
     public function create()
     {
         $business = Business::current();
-        $api      = new Api;
+        $api      = Api::instance();
         $plans    = $api->getAllSubscriptionPlans();
 
         return view('business.sequences.create', compact('business', 'plans'));
@@ -73,7 +73,7 @@ class SequenceController extends Controller
         ]);
 
         $business = Business::current();
-        $api      = new Api;
+        $api      = Api::instance();
         $plans    = $api->getAllSubscriptionPlans();
 
         return view('business.sequences.edit', compact('business', 'data', 'plans'));

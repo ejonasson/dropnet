@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
             $table->integer('customer_id')->unsigned();
             $table->integer('email_id')->unsigned();
             $table->datetime('delivery_time');
+            $table->boolean('sent');
             $table->boolean('delivered');
             $table->boolean('opened');
             $table->timestamps();

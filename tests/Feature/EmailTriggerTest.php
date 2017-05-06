@@ -2,6 +2,7 @@
 
 namespace Feature;
 
+use App\Integrations\Fake\FailedFakeInvoiceEvent;
 use App\Integrations\Stripe\Events\FailedStripeInvoiceEvent;
 use App\Mail\SequenceMail;
 use App\Models\Business\Business;
@@ -18,30 +19,32 @@ use Tests\TestCase;
 
 class EmailTriggerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
     /**
      * @test
-     * @group wip
      */
-    function stripe_payment_failure_event_triggers_sequence()
+    public function stripe_payment_failure_event_triggers_sequence()
     {
+        $secret_key = env('TEST_STRIPE_SECRET_KEY');
+        $publishable_key = env('TEST_STRIPE_PUBLISHABLE_KEY');
         // Setup our data...
         Mail::fake();
         $business = factory(Business::class)->create();
+
         $sequence = factory(Sequence::class)->create([
             'business_id' => $business->id,
-            'remote_subscription_id' => 'SAMPLE_ID'
+            'remote_plan_id' => 'SAMPLE_ID'
         ]);
         $emails = factory(Email::class)->create(['sequence_id' => $sequence->id]);
         $customer = factory(Customer::class)->create(['business_id' => $business->id]);
         $invoice = factory(Invoice::class)->create([
             'status' => 'failed',
             'customer_id' => $customer->id,
-            'remote_subscription_id' => 'SAMPLE_ID'
+            'remote_plan_id' => 'SAMPLE_ID'
         ]);
         // Trigger our event...
-        Event::fire(new FailedStripeInvoiceEvent($invoice));
+        Event::fire(new FailedFakeInvoiceEvent($invoice));
 
         // Confirm an Email is Sent
         Mail::assertSent(SequenceMail::class);

@@ -21,8 +21,12 @@ class CreateInvoiceTable extends Migration
             $table->string('status');
             $table->datetime('date_due');
             $table->string('remote_customer_id');
+            $table->string('remote_plan_id');
             $table->string('remote_subscription_id');
+            $table->integer('customer_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
 

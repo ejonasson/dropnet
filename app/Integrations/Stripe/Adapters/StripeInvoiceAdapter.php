@@ -34,7 +34,7 @@ class StripeInvoiceAdapter
     {
         $business  = $business ?: Business::current();
 
-        $api            = new Api;
+        $api            = Api::instance();
         $stripeCustomer = $api->getCustomer($invoice['customer']);
         $metadata       = $stripeCustomer['metadata'];
         $customer       = Customer::where('remote_id', $invoice['customer'])->first();

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sequence extends Model
 {
-    protected $fillable = ['name', 'remote_subscription_id'];
+    protected $fillable = ['name', 'remote_plan_id'];
 
     /**
      * Add an array of emails for this Sequence

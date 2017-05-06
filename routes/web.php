@@ -19,7 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::group(['prefix' => '{slug}'], function () {
+Route::group(['prefix' => '{slug}', 'middleware' => ['auth', 'userIsPartOfBusiness']], function () {
     Route::get('/', 'BusinessController@show');
     Route::group(['namespace' => 'Settings'], function () {
         Route::get('settings', 'SettingsController@show');

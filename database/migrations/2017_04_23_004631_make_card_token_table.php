@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSequencesTable extends Migration
+class MakeCardTokenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateSequencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sequences', function (Blueprint $table) {
+        Schema::create('card_update_tokens', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('business_id')->unsigned();
-            $table->string('name')->nullable();
-            $table->string('remote_plan_id')->nullable();
+            $table->integer('invoice_id')->unsigned();
+            $table->string('hash');
             $table->timestamps();
 
-            $table->foreign('business_id')->references('id')->on('businesses');
+            $table->foreign('invoice_id')->references('id')->on('invoices');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateSequencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sequences');
+        Schema::dropIfExists('card_update_tokens');
     }
 }

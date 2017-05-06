@@ -23,7 +23,7 @@ $factory->define(App\Models\Business\Business::class, function (Faker\Generator 
 $factory->define(App\Models\Emails\Sequence::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->words(3, true),
-        'remote_subscription_id' => $faker->md5,
+        'remote_plan_id' => $faker->md5,
     ];
 });
 
@@ -44,9 +44,14 @@ $factory->define(App\Models\Invoice::class, function (Faker\Generator $faker) {
         'status'                    => 'complete',
         'date_due'                  => Carbon::now(),
         'remote_customer_id'        => $faker->md5,
-        'remote_subscription_id'    => $faker->md5
+        'remote_subscription_id'    => $faker->md5,
+        'remote_plan_id'            => $faker->md5
     ];
 });
+
+// $factory->define(App\CardUpdateToken::class, function (Faker\Generator $faker) {
+// Don't think we need this, but stubbing out just in case
+// });
 
 $factory->define(App\Models\Customer\Customer::class, function (Faker\Generator $faker) {
     return [

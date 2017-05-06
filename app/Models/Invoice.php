@@ -21,8 +21,17 @@ class Invoice extends Model
 {
 
     protected $fillable = [
-        'remote_id', 'amount', 'currency', 'status', 'due_date', 'remote_customer_id', 'remote_subscription_id', 'business_id'
+        'remote_id', 'amount', 'currency', 'status', 'due_date', 'remote_customer_id', 'remote_subscription_id'
     ];
+
+    /**
+     * Allows us to access the Business Associated with this invoice
+     * @return Business
+     */
+    public function getBusinessAttribute()
+    {
+        return $this->customer->business;
+    }
 
     public function customer()
     {

@@ -68,6 +68,8 @@ class Business extends Model
                     break;
             }
         }
+
+        return $this;
     }
 
     public function createOrUpdateSetting($name, $value)
