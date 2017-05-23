@@ -7,7 +7,7 @@
         </div>
         <label for="content" class="label">Content</label>
         <div class="control">
-            <textarea name="content" v-model="emailContent" placeholder="Enter your email content" class="textarea"></textarea>
+            <textarea :id="editorId" name="content" v-model="emailContent" placeholder="Enter your email content" class="textarea"></textarea>
         </div>
         <div class="control">
             <label for="send-delay">Hours to wait before sending: </label>
@@ -52,6 +52,9 @@
         computed: {
             messageNumber () {
                 return this.index + 1
+            },
+            editorId () {
+                return  'editor-' + this.id
             }
         },
         methods: {
@@ -76,10 +79,14 @@
                 Event.$emit('emailSendDelayUpdate', this.index, val)
             }
         },
-        created () {
+        mounted () {
             this.emailSubject = this.subject
             this.emailContent = this.content
             this.emailSendDelay = this.sendDelay
+            tinymce.init({
+                selector: '#' + this.editorId,
+                branding: false
+            })
         }
     }
 </script>

@@ -14,6 +14,7 @@
     <link href="/css/app.css" rel="stylesheet">
 
     <!-- Scripts -->
+    <script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=361zaqrmpuuom9vratgf86o8pl5i1tx6pppvmtj943c2754i'></script>
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),

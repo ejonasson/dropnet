@@ -2,6 +2,7 @@
     <div class="c-alerts">
       <alert
         v-for="alert in alerts"
+        :key="alert.uid"
         :parent-id="id"
         :type="alert.type"
         :message="alert.message"

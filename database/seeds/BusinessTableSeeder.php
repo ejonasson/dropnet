@@ -17,7 +17,7 @@ class BusinessTableSeeder extends Seeder
             ->create(['name' => 'Test', 'slug' => 'test'])
             ->each(function ($b) {
                 $user = factory(User::class)->create([
-                    'email' => 'ejonasson@gmail.com'
+                    'email' => 'ejonasson@gmail.com',
                 ]);
                 $user->businesses()->attach($b->id);
                 $b->updateSettings([

@@ -1,5 +1,5 @@
 <script>
-    let Alerts = require('../common/alerts')
+    let Alerts = require('../common/Alerts')
     export default {
         components: {
             'alerts': Alerts

@@ -14,6 +14,7 @@
 
         <h3>Sequence Messages</h3>
         <sequence-email v-for="email in sequence"
+        key="email.id"
         :id="email.id"
         :subject="email.subject"
         :content="email.content"
@@ -176,7 +177,6 @@
 
     },
     mounted() {
-      console.log('Create Sequence mounted.')
     }
   }
 </script>

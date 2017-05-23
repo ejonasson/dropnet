@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Business\Business;
+
 /**
  * Our Helper Functions
  * These should mostly be things used as shorthand getters in the view,
